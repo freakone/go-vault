@@ -51,18 +51,18 @@ func fetchVaultToken(vaultAddr string, jwt string, vaultRole string) (vaultToken
 	}
 	defer resp.Body.Close()
 
-	var s models.Auth
+	var s models.Login
 
 	err = json.NewDecoder(resp.Body).Decode(&s)
 	if err != nil {
 		return "", err
 	}
 
-	if len(s.Errors) > 0 {
-		return "", fmt.Errorf(s.Errors[0])
+	if len(s.Auth.Errors) > 0 {
+		return "", fmt.Errorf(s.Auth.Errors[0])
 	}
 
-	return s.ClientToken, nil
+	return s.Auth.ClientToken, nil
 }
 
 func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret string, err error) {
