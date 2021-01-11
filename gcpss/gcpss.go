@@ -78,11 +78,7 @@ func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret
 	}
 	defer resp.Body.Close()
 
-	s := struct {
-		Data struct {
-			Data string `json:"data"`
-		} `json:"data"`
-	}{}
+	var s models.Data
 
 	if err := json.NewDecoder(resp.Body).Decode(&s); err != nil {
 		return "", err
