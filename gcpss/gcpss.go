@@ -95,12 +95,13 @@ func FetchVaultSecret(vaultAddr string, vaultSecret string, vaultRole string) (s
 	if err != nil {
 		return "", err
 	}
-	log.Panicln("jwt:", jwt)
+	log.Println("jwt:", jwt)
 
 	token, err := fetchVaultToken(vaultAddr, jwt, vaultRole)
 	if err != nil {
 		return "", err
 	}
+	log.Println("token:", token)
 
 	data, err := readSecret(vaultAddr, token, vaultSecret)
 	if err != nil {
