@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/BESTSELLER/go-vault/models"
@@ -94,6 +95,7 @@ func FetchVaultSecret(vaultAddr string, vaultSecret string, vaultRole string) (s
 	if err != nil {
 		return "", err
 	}
+	log.Panicln("jwt:", jwt)
 
 	token, err := fetchVaultToken(vaultAddr, jwt, vaultRole)
 	if err != nil {
