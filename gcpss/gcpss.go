@@ -80,7 +80,7 @@ func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret
 
 	s := struct {
 		Data struct {
-			Value string `json:"value"`
+			Data string `json:"Data"`
 		} `json:"data"`
 	}{}
 
@@ -88,7 +88,7 @@ func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret
 		return "", err
 	}
 
-	return s.Data.Value, nil
+	return s.Data.Data, nil
 
 }
 
