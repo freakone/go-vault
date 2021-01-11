@@ -33,7 +33,7 @@ type Data struct {
 	Renewable     bool   `json:"renewable"`
 	LeaseDuration int    `json:"lease_duration"`
 	Data          struct {
-		Data     string `json:"data"`
+		Data     interface{} `json:"data"`
 		Metadata struct {
 			CreatedTime  time.Time `json:"created_time"`
 			DeletionTime string    `json:"deletion_time"`
