@@ -78,12 +78,17 @@ func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
+	s := struct {
+		Data struct {
+			Value string `json:"value"`
+		} `json:"data"`
+	}{}
+
+	if err := json.NewDecoder(resp.Body).Decode(&s); err != nil {
 		return "", err
 	}
 
-	return string(body), nil
+	return s.Data.Value, nil
 
 }
 
