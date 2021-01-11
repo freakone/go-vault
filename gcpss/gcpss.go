@@ -3,9 +3,11 @@ package gcpss
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
+	"github.com/BESTSELLER/go-vault/models"
 	"github.com/hashicorp/vault/api"
 )
 
@@ -49,17 +51,18 @@ func fetchVaultToken(vaultAddr string, jwt string, vaultRole string) (vaultToken
 	}
 	defer resp.Body.Close()
 
-	s := struct {
-		Auth struct {
-			ClientToken string `json:"client_token"`
-		} `json:"auth"`
-	}{}
+	var s models.Auth
 
-	if err := json.NewDecoder(resp.Body).Decode(&s); err != nil {
+	err = json.NewDecoder(resp.Body).Decode(&s)
+	if err != nil {
 		return "", err
 	}
 
-	return s.Auth.ClientToken, nil
+	if len(s.Errors) > 0 {
+		return "", fmt.Errorf(s.Errors[0])
+	}
+
+	return s.ClientToken, nil
 }
 
 // FetchVaultSecret returns secret from Hashicorp Vault.
