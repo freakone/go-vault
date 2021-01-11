@@ -72,11 +72,13 @@ func FetchVaultSecret(vaultAddr string, vaultSecret string, vaultRole string) (s
 	if err != nil {
 		return "", err
 	}
+	fmt.Println("jwt:", jwt)
 
 	token, err := fetchVaultToken(vaultAddr, jwt, vaultRole)
 	if err != nil {
 		return "", err
 	}
+	fmt.Println("token:", token)
 
 	client, err := api.NewClient(&api.Config{
 		Address: vaultAddr,
