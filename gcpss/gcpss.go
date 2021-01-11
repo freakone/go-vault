@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/BESTSELLER/go-vault/models"
-	"github.com/hashicorp/vault/api"
 )
 
 func fetchJWT(vaultRole string) (jwt string, err error) {
@@ -65,6 +64,29 @@ func fetchVaultToken(vaultAddr string, jwt string, vaultRole string) (vaultToken
 	return s.ClientToken, nil
 }
 
+func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret string, err error) {
+	client := new(http.Client)
+	req, err := http.NewRequest(http.MethodGet, vaultAddr+"/v1/"+vaultSecret, nil)
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("X-Vault-Token", vaultToken)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(body), nil
+
+}
+
 // FetchVaultSecret returns secret from Hashicorp Vault.
 func FetchVaultSecret(vaultAddr string, vaultSecret string, vaultRole string) (secret string, err error) {
 
@@ -72,28 +94,13 @@ func FetchVaultSecret(vaultAddr string, vaultSecret string, vaultRole string) (s
 	if err != nil {
 		return "", err
 	}
-	fmt.Println("jwt:", jwt)
 
 	token, err := fetchVaultToken(vaultAddr, jwt, vaultRole)
 	if err != nil {
 		return "", err
 	}
-	fmt.Println("token:", token)
 
-	client, err := api.NewClient(&api.Config{
-		Address: vaultAddr,
-	})
-	if err != nil {
-		panic(err)
-	}
-	client.SetToken(token)
-
-	sec, err := client.Logical().Read(vaultSecret)
-	if err != nil {
-		return "", err
-	}
-
-	data, err := json.Marshal(sec.Data["data"])
+	data, err := readSecret(vaultAddr, token, vaultSecret)
 	if err != nil {
 		return "", err
 	}
