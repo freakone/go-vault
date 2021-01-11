@@ -84,7 +84,8 @@ func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret
 		return "", err
 	}
 
-	return s.Data.Data, nil
+	data := fmt.Sprintf("%v", s.Data.Data)
+	return data, nil
 
 }
 
