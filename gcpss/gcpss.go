@@ -84,8 +84,11 @@ func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret
 		return "", err
 	}
 
-	data := fmt.Sprintf("%v", s.Data.Data)
-	return data, nil
+	data, err := json.Marshal(s.Data.Data)
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 
 }
 
