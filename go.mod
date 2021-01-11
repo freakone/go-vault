@@ -1,4 +1,4 @@
-module github.com/BESTSELLER/gcp-ss
+module github.com/BESTSELLER/gcpss
 
 go 1.15
 
