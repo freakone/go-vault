@@ -10,6 +10,7 @@ type Login struct {
 	Data          interface{} `json:"data"`
 	WrapInfo      interface{} `json:"wrap_info"`
 	Warnings      interface{} `json:"warnings"`
+	Errors        []string    `json:"errors"`
 	Auth          struct {
 		ClientToken   string   `json:"client_token"`
 		Accessor      string   `json:"accessor"`
@@ -18,12 +19,11 @@ type Login struct {
 		Metadata      struct {
 			RoleName string `json:"role_name"`
 		} `json:"metadata"`
-		LeaseDuration int      `json:"lease_duration"`
-		Renewable     bool     `json:"renewable"`
-		EntityID      string   `json:"entity_id"`
-		TokenType     string   `json:"token_type"`
-		Orphan        bool     `json:"orphan"`
-		Errors        []string `json:"errors"`
+		LeaseDuration int    `json:"lease_duration"`
+		Renewable     bool   `json:"renewable"`
+		EntityID      string `json:"entity_id"`
+		TokenType     string `json:"token_type"`
+		Orphan        bool   `json:"orphan"`
 	} `json:"auth"`
 }
 
