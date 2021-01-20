@@ -60,6 +60,9 @@ func fetchVaultToken(vaultAddr string, jwt string, vaultRole string) (vaultToken
 	if len(s.Errors) > 0 {
 		return "", fmt.Errorf(s.Errors[0])
 	}
+	if s.Auth.ClientToken == "" {
+		return "", fmt.Errorf("unabled to retrieve vault token")
+	}
 
 	return s.Auth.ClientToken, nil
 }
