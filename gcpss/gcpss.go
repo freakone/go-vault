@@ -63,6 +63,13 @@ func fetchVaultToken(vaultAddr string, jwt string, vaultRole string) (vaultToken
 	if s.Auth.ClientToken == "" {
 		return "", fmt.Errorf("unabled to retrieve vault token")
 	}
+	if resp.StatusCode < 200 || resp.StatusCode > 202 {
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return "", err
+		}
+		return "", fmt.Errorf("request failed, expected status: 2xx got: %d, error mesage %s", resp.StatusCode, string(body))
+	}
 
 	return s.Auth.ClientToken, nil
 }
@@ -91,8 +98,15 @@ func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret
 	if err != nil {
 		return "", err
 	}
-	return string(data), nil
+	if resp.StatusCode < 200 || resp.StatusCode > 202 {
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return "", err
+		}
+		return "", fmt.Errorf("request failed, expected status: 2xx got: %d, error mesage %s", resp.StatusCode, string(body))
+	}
 
+	return string(data), nil
 }
 
 // FetchVaultSecret returns secret from Hashicorp Vault.
