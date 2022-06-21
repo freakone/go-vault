@@ -1,0 +1,16 @@
+
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: go-vault
+  description: |
+    Library that fetches secrets from Hashicorp Vault when running cloud run.
+  annotations:
+    sonarqube.org/project-key: BESTSELLER_go-vault
+    github.com/project-slug:  BESTSELLER/go-vault
+    circleci.com/project-slug: github/BESTSELLER/go-vault
+spec:
+  type: library
+  owner: engineering-services
+  lifecycle: production
