@@ -13,4 +13,3 @@ spec:
   type: library
   owner: engineering-services
   lifecycle: production
-  lifecycle: production
