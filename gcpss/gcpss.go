@@ -16,7 +16,7 @@ func fetchJWT(vaultRole string) (jwt string, err error) {
 }
 
 func fetchVaultToken(vaultAddr string, jwt string, vaultRole string) (vaultToken string, err error) {
-	client := new(http.Client)
+	client := http.DefaultClient
 
 	j := `{"role":"` + vaultRole + `", "jwt":"` + jwt + `"}`
 
@@ -56,7 +56,7 @@ func fetchVaultToken(vaultAddr string, jwt string, vaultRole string) (vaultToken
 }
 
 func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret string, err error) {
-	client := new(http.Client)
+	client := http.DefaultClient
 	req, err := http.NewRequest(http.MethodGet, vaultAddr+"/v1/"+vaultSecret, nil)
 	if err != nil {
 		return "", err
