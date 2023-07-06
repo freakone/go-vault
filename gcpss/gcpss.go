@@ -90,9 +90,8 @@ func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret
 	return string(data), nil
 }
 
-// FetchVaultSecret returns secret from Hashicorp Vault.
-func FetchVaultSecret(vaultAddr string, vaultSecret string, vaultRole string) (secret string, err error) {
-
+// FetchVaultToken gets Workload Identity Token from GCP Metadata API and uses it to fetch Vault Token.
+func FetchVaultToken(vaultAddr string, vaultRole string) (vaultToken string, err error) {
 	jwt, err := fetchJWT(vaultRole)
 	if err != nil {
 		return "", err
@@ -103,11 +102,16 @@ func FetchVaultSecret(vaultAddr string, vaultSecret string, vaultRole string) (s
 		return "", err
 	}
 
+	return token, nil
+}
+
+// FetchVaultSecret returns secret from Hashicorp Vault.
+func FetchVaultSecret(vaultAddr string, vaultSecret string, vaultRole string) (secret string, err error) {
+	token, err := FetchVaultToken(vaultAddr, vaultRole)
+
 	data, err := readSecret(vaultAddr, token, vaultSecret)
 	if err != nil {
 		return "", err
 	}
-
-	return string(data), nil
-
+	return data, nil
 }
