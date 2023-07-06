@@ -2,40 +2,21 @@ package gcpss
 
 import (
 	"bytes"
+	"cloud.google.com/go/compute/metadata"
 	"encoding/json"
 	"fmt"
+	"github.com/BESTSELLER/go-vault/models"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/BESTSELLER/go-vault/models"
 )
 
 func fetchJWT(vaultRole string) (jwt string, err error) {
-	client := new(http.Client)
-
-	url := "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience=http://vault/" + vaultRole + "&format=full"
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		return "", err
-	}
-	req.Header.Set("Metadata-Flavor", "Google")
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-
-	return string(body), nil
+	client := metadata.NewClient(http.DefaultClient)
+	return client.Get("instance/service-accounts/default/identity?audience=http://vault/" + vaultRole + "&format=full")
 }
 
 func fetchVaultToken(vaultAddr string, jwt string, vaultRole string) (vaultToken string, err error) {
-	client := new(http.Client)
+	client := http.DefaultClient
 
 	j := `{"role":"` + vaultRole + `", "jwt":"` + jwt + `"}`
 
@@ -75,7 +56,7 @@ func fetchVaultToken(vaultAddr string, jwt string, vaultRole string) (vaultToken
 }
 
 func readSecret(vaultAddr string, vaultToken string, vaultSecret string) (secret string, err error) {
-	client := new(http.Client)
+	client := http.DefaultClient
 	req, err := http.NewRequest(http.MethodGet, vaultAddr+"/v1/"+vaultSecret, nil)
 	if err != nil {
 		return "", err
