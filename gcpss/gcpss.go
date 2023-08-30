@@ -20,7 +20,7 @@ func fetchVaultToken(vaultAddr string, jwt string, vaultRole string) (vaultToken
 
 	j := `{"role":"` + vaultRole + `", "jwt":"` + jwt + `"}`
 
-	req, err := http.NewRequest(http.MethodPost, vaultAddr+"/v1/auth/gcp/login", bytes.NewBufferString(j))
+	req, err := http.NewRequest(http.MethodPost, vaultAddr+"/v1/admin/auth/gcp/login", bytes.NewBufferString(j))
 	if err != nil {
 		return "", err
 	}
