@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/BESTSELLER/go-vault/gcpss"
+	"github.com/freakone/go-vault/gcpss"
 )
 
 func main() {
