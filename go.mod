@@ -1,4 +1,4 @@
-module github.com/BESTSELLER/go-vault
+module github.com/freakone/go-vault
 
 go 1.20
 
